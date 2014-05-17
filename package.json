@@ -1,0 +1,28 @@
+{
+  "name": "yvr-conf-free",
+  "version": "0.1.0",
+  "author": "Bryan Clark <clarkbw@gmail.com>",
+  "description": "A Node server that gathers the free/busy calendar information for conference rooms in Mozilla YVR",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clarkbw/yvr-conf-free.git"
+  },
+  "keywords": [
+    "yvr",
+    "conference",
+    "room"
+  ],
+  "dependencies" : {
+    "ical"   :  "clarkbw/ical.js"
+  },
+  "bundledDependencies": [
+    "ical"
+  ],  
+  "license": "BSD",
+  "engines": {
+    "node": ">=0.6"
+  }
+}

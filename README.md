@@ -9,6 +9,19 @@ Getting Started
   npm install
   npm start
 
+Endpoints and API
+=============
+
+* Main Widget
+  * http://0.0.0.0:3002/
+* All Rooms and related Free / Busy information
+  * http://0.0.0.0:3002/api/rooms
+* Only rooms currently busy
+  * http://0.0.0.0:3002/api/rooms/busy
+* Only rooms currently free
+  * http://0.0.0.0:3002/api/rooms/free
+
+( NOTE: currently busy and free also includes a 5 min start time 'fuzz' where a room will be included if it is about to become free or busy )
 
 Current Status
 =============

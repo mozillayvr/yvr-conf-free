@@ -49,7 +49,7 @@ function humanize(e) {
 function getFreeBusy() {
   var now = moment();
 
-  console.log("getFreeBusy", now.toISOString());
+  console.log("getFreeBusy", now.format('h:mma'));
 
   rooms.forEach(function (room) {
 

@@ -168,7 +168,7 @@ app.get('/', function(req, res){
   });
 });
 
-var server = app.listen(3002, function() {
+var server = app.listen(Number(process.env.PORT || 5000), function() {
   getFreeBusy();
-  console.log('Listening on port %d', server.address().port);
+  console.log('NODE_ENV=%s http://%s:%d', app.settings.env, server.address().address, server.address().port);
 });

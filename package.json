@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/clarkbw/yvr-conf-free.git"
+    "url": "https://github.com/mozillayvr/yvr-conf-free.git"
   },
   "keywords": [
     "yvr",
@@ -16,12 +16,10 @@
     "room"
   ],
   "dependencies" : {
-    "ical"   :  "clarkbw/ical.js"
+    "ical"    : "clarkbw/ical.js",
+    "express" : "3.x"
   },
-  "bundledDependencies": [
-    "ical"
-  ],  
-  "license": "BSD",
+  "license": "MPL",
   "engines": {
     "node": ">=0.6"
   }

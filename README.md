@@ -6,8 +6,8 @@ A node.js server that gathers the Mozilla YVR conference room FreeBusy informati
 Getting Started
 =============
 
-  npm install
-  npm start
+    npm install
+    npm start
 
 Endpoints and API
 =============
@@ -35,9 +35,9 @@ TODO
 - [x] Our iCal library now handles FreeBusy information
 - [x] This Node.js file grabs all the FB data for Mozilla YVR
 
-Conference Rooms
+Supported Conference Rooms
 =============
-(all at mozilla.com)
+
 * Siwash : yvr-2a
 * Buntzen : yvr-2b
 * Deep Cove : yvr-2c
@@ -49,5 +49,7 @@ Conference Rooms
 * Whytecliff : yvr-commons
 
 Zimbra ICS Calendar URL Format:
-  https://mail.mozilla.com/home/$EMAIL/Calendar?fmt=ifb&date=$DATE
+
+    https://mail.mozilla.com/home/$EMAIL/Calendar?fmt=ifb&date=$DATE
+
 Where `$EMAIL` = conf room email AND `$DATE` = moment.format("YYYYMMDD")

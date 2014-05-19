@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title> <%= title %> </title>
+
+  <style type="text/css">
+    body {
+      padding: 50px;
+      font: 18pt Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h1>Rooms</h1>
+  <ul id="rooms">
+    <% rooms.forEach(function(room){ %>
+      <li><%= room.name %></li>
+      <% if (room.freebusy.length > 0) { %>
+      <ul>
+      <% room.freebusy.forEach(function(fb){ %>
+        <li><%= fb.starts %> &mdash; <%= moment(fb.start).format('h:mma') %></li>
+      <% }) %>
+      </ul>
+      <% } %>
+    <% }) %>
+  </ul>
+
+  <script src="/js/moment.js" type="text/javascript"></script>
+</body>
+</html>

@@ -17,6 +17,24 @@ var express = require('express');
 
 var moment = require('moment');
 
+moment.lang('en', {
+    relativeTime : {
+        future: "in %s",
+        past:   "%s ago",
+        s:  "s",
+        m:  "%d m",
+        mm: "%d m",
+        h:  "%d h",
+        hh: "%d h",
+        d:  "a day",
+        dd: "%d days",
+        M:  "a month",
+        MM: "%d months",
+        y:  "a year",
+        yy: "%d years"
+    }
+});
+
 // ICS calendar URL format, first %s requires email, second %s requires date in 20140516 format
 // thanks to this: http://www.zimbra.com/forums/users/16877-only-publish-free-busy-information-icalendar.html#post88423
 var ics = "https://mail.mozilla.com/home/%s/Calendar?fmt=ifb&date=%s";
@@ -153,18 +171,23 @@ app.locals.moment = function(date) {
   return moment(date);
 }
 
+app.locals.timeOrFromNow = function (d) {
+  var m = moment(d);
+  /* if more than 1 hour use the time */
+  if (m.diff(now) > 60 * 60 * 1000) {
+    return m.format('h:mma');
+  }
+  return m.fromNow();
+}
+
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'html');
 
-app.get('/js/moment.js', function (req,res) {
-  res.sendfile(path.join(__dirname,'node_modules','moment','moment.js'));
-});
-
 app.get('/', function(req, res){
   res.render('index', {
     rooms: rooms,
-    title: "Mozilla YVR Conference Rooms"
+    title: "YVR Conference Rooms"
   });
 });
 

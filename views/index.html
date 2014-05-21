@@ -2,30 +2,83 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title> <%= title %> </title>
+  <title><%= title %></title>
 
   <style type="text/css">
     body {
-      padding: 50px;
-      font: 18pt Helvetica, Arial, sans-serif;
+      margin: auto;
+      text-align: center;
+      font: 18pt Open Sans, Arial, sans-serif;
+      color: #333;
+    }
+    h2, h5 {
+      font-weight: 100;
+      margin: 8px;
+    }
+    h2 {
+      color: #aaa;
+    }
+    h5 {
+      color: #999;
+    }
+    .room {
+      position: relative;
+      display: inline-block;
+      width: 192px;
+      height: 192px;
+      border: 1px solid #aaa;
+      margin: 8px 4px;
+      text-align: center;
+      font-variant: small-caps;
+      background-color: #fff;
+    }
+    .name {
+      line-height: 192px;
+    }
+    .commons { /* Whytecliff */
+      width: 820px;
+    }
+    .busy {
+      background-color: #ccc;
+    }
+    .fb {
+      position: absolute;
+      line-height: 122px;
+      width: 192px;
+      right: 4px;
+      bottom: 4px;
+      font-size: 14pt;
     }
   </style>
 </head>
 <body>
-  <h1>Rooms</h1>
-  <ul id="rooms">
-    <% rooms.forEach(function(room){ %>
-      <li><%= room.name %></li>
-      <% if (room.freebusy.length > 0) { %>
-      <ul>
-      <% room.freebusy.forEach(function(fb){ %>
-        <li><%= fb.starts %> &mdash; <%= moment(fb.start).format('h:mma') %></li>
-      <% }) %>
-      </ul>
-      <% } %>
+  <% var now = moment();
+     var busyNow = function (fb) { return now.isAfter(fb.start) && now.isBefore(fb.end); };
+  %>
+  <h2><%= title %></h2>
+  <h5><%= moment().format('dddd, MMMM Do') %></h5>
+  <div id="rooms">
+    <div class="row">
+    <% rooms.sort(function (a,b) { return a.id > b.id; }).forEach(function(room, index) { %>
+      <div class="room <%= room.id %> <%= room.freebusy.some(busyNow)? "busy" : "" %>">
+        <span class="name"><%= room.name %></span>
+        <% room.freebusy.some(function(fb){ %>
+          <% if (now.isAfter(fb.start) && now.isBefore(fb.end)) { %>
+            <span class="fb">free <%= timeOrFromNow(fb.end) %></span>
+            <% return true; %>
+          <% } else { %>
+            <% if (now.isBefore(fb.end)) { %>
+              <span class="fb">busy <%= timeOrFromNow(fb.start) %></span>
+              <% return true; %>
+            <% } %>
+          <% } %>
+        <% return false; %>
+        <% }) %>
+      </div>
+      <% if (index === 3 || index === 7) { %> </div><div class="row"> <% } %>
     <% }) %>
-  </ul>
+    </div>
+  </div>
 
-  <!-- <script src="/js/moment.js" type="text/javascript"></script> -->
 </body>
 </html>

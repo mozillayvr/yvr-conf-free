@@ -11,17 +11,18 @@
 var ical = require('ical');
 
 var format = require('util').format;
-var path = require('path');
 
 var express = require('express');
 
 var moment = require('moment');
 
+var CALENDAR_INTERVAL = 5; // in minutes
+
 moment.lang('en', {
     relativeTime : {
         future: "in %s",
         past:   "%s ago",
-        s:  "s",
+        s:  "a jiff",
         m:  "%dm",
         mm: "%dm",
         h:  "%dh",
@@ -58,12 +59,6 @@ function atMozYVR(id) {
   return "yvr-" + id + "@mozilla.com";
 }
 
-function humanize(e) {
-  e.starts = moment(e.start).fromNow();
-  e.ends   = moment(e.end).fromNow();
-  return e;
-}
-
 function getFreeBusy() {
   var now = moment();
 
@@ -90,7 +85,7 @@ function getFreeBusy() {
           if (data.hasOwnProperty(k)){
             var ev = data[k];
             if (ev.type && ev.type === "VFREEBUSY" && typeof ev.freebusy !== "undefined") {
-              room.freebusy = ev.freebusy.filter(today).map(humanize);
+              room.freebusy = ev.freebusy.filter(today);
             } else {
               room.freebusy = [];
             }
@@ -102,11 +97,11 @@ function getFreeBusy() {
   });
 
 
-  // add 15 min or the remainder of 15 min
-  now.add('minutes', (15 - (now.minutes() % 15)));
+  // add CALENDAR_INTERVAL min or the remainder of CALENDAR_INTERVAL min
+  now.add('minutes', (CALENDAR_INTERVAL - (now.minutes() % CALENDAR_INTERVAL)));
   console.log("next run", now.fromNow());
 
-  // run every 15 min on the 15
+  // run every CALENDAR_INTERVAL min on the CALENDAR_INTERVAL
   // use the diff against the current time for milliseconds
   setTimeout(getFreeBusy, now.diff());
 }
@@ -118,7 +113,7 @@ function busy(rs) {
   return rs.filter(function (room) {
     return room.freebusy && room.freebusy.some(function (fb) {
       var fuzzStart = moment(fb.start).subtract('minutes', 5);
-      console.log(room.name, "busy", fuzzStart.fromNow(), "and free again", moment(fb.end).fromNow());
+      // console.log(room.name, "busy", fuzzStart.fromNow(), "and free again", moment(fb.end).fromNow());
       return fb.type === "BUSY" && now.isAfter(fuzzStart) && now.isBefore(fb.end);
     });
   });
@@ -140,15 +135,7 @@ function free(rs) {
 
 var app = express();
 
-app.configure('development, test', function () {
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
-
-app.configure('production', function () {
-  app.use(express.errorHandler());
-});
-
-app.use(express.logger());
+app.use(express.static(__dirname + '/public'));
 
 // JSON API
 

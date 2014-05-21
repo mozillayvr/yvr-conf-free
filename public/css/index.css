@@ -1,0 +1,48 @@
+body {
+  margin: auto;
+  text-align: center;
+  font: 18pt Open Sans, Arial, sans-serif;
+  color: #333;
+}
+h2, h5 {
+  font-weight: 100;
+  margin: 8px;
+}
+h2 {
+  color: #aaa;
+}
+h5 {
+  color: #999;
+}
+.room {
+  position: relative;
+  display: inline-block;
+  width: 192px;
+  height: 192px;
+  border: 1px solid #aaa;
+  margin: 8px 4px;
+  text-align: center;
+  font-variant: small-caps;
+  background-color: #fff;
+}
+.name {
+  line-height: 162px;
+}
+.commons { /* Whytecliff */
+  width: 820px;
+}
+.commons .fb {
+  width: 820px;
+}
+.busy {
+  background-color: #ccc;
+}
+.fb {
+  position: absolute;
+  line-height: 122px;
+  width: 192px;
+  right: 4px;
+  bottom: 4px;
+  font-size: 14pt;
+  color: #666;
+}

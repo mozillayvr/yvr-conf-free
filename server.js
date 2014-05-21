@@ -22,10 +22,10 @@ moment.lang('en', {
         future: "in %s",
         past:   "%s ago",
         s:  "s",
-        m:  "%d m",
-        mm: "%d m",
-        h:  "%d h",
-        hh: "%d h",
+        m:  "%dm",
+        mm: "%dm",
+        h:  "%dh",
+        hh: "%dh",
         d:  "a day",
         dd: "%d days",
         M:  "a month",
@@ -174,7 +174,7 @@ app.locals.moment = function(date) {
 app.locals.timeOrFromNow = function (d) {
   var m = moment(d);
   /* if more than 1 hour use the time */
-  if (m.diff(now) > 60 * 60 * 1000) {
+  if (m.diff(moment()) > 60 * 60 * 1000) {
     return m.format('h:mma');
   }
   return m.fromNow();

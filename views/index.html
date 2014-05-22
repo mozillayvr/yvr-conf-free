@@ -49,14 +49,14 @@ if (!Array.prototype.find) {
         var m = moment(d);
         /* if more than 1 hour use the time */
         if (m.diff(moment()) > 60 * 60 * 1000) {
-          return m.format('h:mma');
+          return " at " + m.format('h:mma');
         }
         return m.fromNow();
       }
 
       function classAttrs(room) {
         var vidyo = (room.vidyo)? "vidyo" : "";
-        return [vidyo, room.neighborhood, room.size].join(" ");
+        return [vidyo, room.neighborhood, room.size].map(function (r) { return (r)? r+"-room" : r;}).join(" ");
       }
 
       var busyNow = function (fb) { return now.isAfter(fb.start) && now.isBefore(fb.end); };
@@ -89,7 +89,7 @@ if (!Array.prototype.find) {
   %>
   <div class="container-fluid">
   <h2 class="pull-left"><%= title %></h2>
-  <h2 class="pull-right"><small><%= moment().format('dddd, MMMM Do') %></small></h2>
+  <h2 class="pull-right"><%= moment().format('dddd, MMMM Do') %></h2>
   <div class="clearfix"></div>
 
   <div class="row">
@@ -98,7 +98,7 @@ if (!Array.prototype.find) {
       <% free.forEach(function (room) { %>
         <div class="room <%= classAttrs(room) %>">
           <span class="name"><%= room.name %></span>
-          <span class="fb"><%= nextFb(room) %></span>
+          <div class="fb"><%= nextFb(room) %></div>
         </div>
       <% }); %>
     </div>
@@ -107,7 +107,7 @@ if (!Array.prototype.find) {
       <% almostFree.forEach(function (room) { %>
         <div class="room <%= classAttrs(room) %>">
           <span class="name"><%= room.name %></span>
-          <span class="fb"><%= nextFb(room) %></span>
+          <div class="fb"><%= nextFb(room) %></div>
         </div>
       <% }); %>
     </div>
@@ -116,7 +116,7 @@ if (!Array.prototype.find) {
       <% reallyBusy.forEach(function (room) { %>
         <div class="room <%= classAttrs(room) %>">
           <span class="name"><%= room.name %></span>
-          <span class="fb"><%= nextFb(room) %></span>
+          <span class="fb pull-right"><%= nextFb(room) %></span>
         </div>
       <% }); %>
     </div>

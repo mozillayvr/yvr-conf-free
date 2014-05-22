@@ -18,7 +18,7 @@ var moment = require('moment');
 
 var CALENDAR_INTERVAL = 5; // in minutes
 
-var BUSY_FUZZ = 10;
+var BUSY_FUZZ = 15;
 
 moment.lang('en', {
     relativeTime : {
@@ -128,7 +128,7 @@ function free(rs) {
     return room.freebusy && room.freebusy.every(function (fb) {
       var fuzzStart = moment(fb.start).subtract('minutes', BUSY_FUZZ);
       var isFree = (fb.type === "FREE" && now.isAfter(fuzzStart) && now.isBefore(fb.end));
-      var isNotNow = !(now.isAfter(fuzzStart) && now.isBefore(fb.end));
+      var isNotNow = !(now.isAfter(fb.start) && now.isBefore(fb.end));
       return (isFree || isNotNow);
     });
   });

@@ -3,46 +3,55 @@ body {
   text-align: center;
   font: 18pt Open Sans, Arial, sans-serif;
   color: #333;
+  background-color: #315B8C; /* #1A3C65; */
 }
 h2, h5 {
   font-weight: 100;
-  margin: 8px;
+  margin: 8pt;
 }
 h2 {
-  color: #aaa;
+  color: #ccc;
 }
 h5 {
-  color: #999;
+  color: #eee;
 }
+
+.column {
+  width: 192pt;
+  display: inline-block;
+  vertical-align: top;
+}
+
 .room {
   position: relative;
   display: inline-block;
-  width: 192px;
-  height: 192px;
-  border: 1px solid #aaa;
-  margin: 8px 4px;
-  text-align: center;
+  width: 192pt;
+  height: 36pt;
+  margin: 4pt;
+  text-align: left;
   font-variant: small-caps;
   background-color: #fff;
 }
-.name {
-  line-height: 162px;
+.busy .room {
+  background-color: #eee;
 }
-.commons { /* Whytecliff */
-  width: 820px;
+.almostFree .room {
+  background-color: #FBFE00;
+  height: 48pt;
 }
-.commons .fb {
-  width: 820px;
+.free .room {
+  background-color: #9FEE00;
+  height: 48pt;
 }
-.busy {
-  background-color: #ccc;
+
+.room .name {
+  margin: 4pt;
 }
-.fb {
-  position: absolute;
-  line-height: 122px;
-  width: 192px;
-  right: 4px;
-  bottom: 4px;
-  font-size: 14pt;
+
+.room .fb {
+  font-size: 12pt;
   color: #666;
+  float: right;
+  display: inline-block;
+  margin: 4pt;
 }

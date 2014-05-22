@@ -18,6 +18,8 @@ var moment = require('moment');
 
 var CALENDAR_INTERVAL = 5; // in minutes
 
+var BUSY_FUZZ = 10;
+
 moment.lang('en', {
     relativeTime : {
         future: "in %s",
@@ -36,22 +38,23 @@ moment.lang('en', {
     }
 });
 
+
 // ICS calendar URL format, first %s requires email, second %s requires date in 20140516 format
 // thanks to this: http://www.zimbra.com/forums/users/16877-only-publish-free-busy-information-icalendar.html#post88423
 var ics = "https://mail.mozilla.com/home/%s/Calendar?fmt=ifb&date=%s";
 
 // room names and ids for all the Mozilla YVR conference rooms
-var rooms = [ { name : "Siwash", id : "2a" },
-              { name : "Buntzen", id : "2b" },
-              { name : "Deep Cove", id : "2c" },
-              { name : "Lighthouse", id : "2d" },
-              { name : "Crazy Raven", id : "2e" },
-              { name : "Wreck", id : "2f" },
-              { name : "Dinky Peak", id : "2g" },
-              { name : "Adanac", id : "2h" },
+var rooms = [ { name : "Siwash", id : "2a", neighborhood : "west", vidyo : true },
+              { name : "Buntzen", id : "2b", neighborhood : "west", vidyo : false },
+              { name : "Deep Cove", id : "2c", neighborhood : "west", vidyo : true },
+              { name : "Crazy Raven", id : "2e", neighborhood : "west", vidyo : true },
+              { name : "Lighthouse", id : "2d", neighborhood : "east", vidyo : false },
+              { name : "Wreck", id : "2f", neighborhood : "east", vidyo : false },
+              { name : "Dinky Peak", id : "2g", neighborhood : "east", vidyo : false },
+              { name : "Adanac", id : "2h", neighborhood : "east", vidyo : false },
               // not sure I should be including this one
-              { name : "Whytecliff", id : "commons" }
-            ];
+              { name : "Whytecliff", id : "commons", neighborhood : "central", vidyo : true }
+            ].map(function(i) { i.freebusy = []; return i;});
 
 // util function to convert a Mozilla room id into a YVR
 // @mozilla email address.  Means less repeated info and perhaps less spam
@@ -112,7 +115,7 @@ function busy(rs) {
   var now = moment();
   return rs.filter(function (room) {
     return room.freebusy && room.freebusy.some(function (fb) {
-      var fuzzStart = moment(fb.start).subtract('minutes', 5);
+      var fuzzStart = moment(fb.start).subtract('minutes', BUSY_FUZZ);
       // console.log(room.name, "busy", fuzzStart.fromNow(), "and free again", moment(fb.end).fromNow());
       return fb.type === "BUSY" && now.isAfter(fuzzStart) && now.isBefore(fb.end);
     });
@@ -123,7 +126,7 @@ function free(rs) {
   var now = moment();
   return rs.filter(function (room) {
     return room.freebusy && room.freebusy.every(function (fb) {
-      var fuzzStart = moment(fb.start).subtract('minutes', 5);
+      var fuzzStart = moment(fb.start).subtract('minutes', BUSY_FUZZ);
       var isFree = (fb.type === "FREE" && now.isAfter(fuzzStart) && now.isBefore(fb.end));
       var isNotNow = !(now.isAfter(fuzzStart) && now.isBefore(fb.end));
       return (isFree || isNotNow);
@@ -158,15 +161,6 @@ app.locals.moment = function(date) {
   return moment(date);
 }
 
-app.locals.timeOrFromNow = function (d) {
-  var m = moment(d);
-  /* if more than 1 hour use the time */
-  if (m.diff(moment()) > 60 * 60 * 1000) {
-    return m.format('h:mma');
-  }
-  return m.fromNow();
-}
-
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'html');
@@ -174,6 +168,8 @@ app.set('view engine', 'html');
 app.get('/', function(req, res){
   res.render('index', {
     rooms: rooms,
+    busy: busy(rooms),
+    free: free(rooms),
     title: "YVR Conference Rooms"
   });
 });

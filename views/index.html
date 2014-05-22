@@ -5,35 +5,115 @@
   <meta http-equiv="refresh" content="60" >
   <title><%= title %></title>
   <link rel="stylesheet" href="css/index.css">
+<%
+// Need the Array.find method cause its nice
+if (!Array.prototype.find) {
+  Object.defineProperty(Array.prototype, 'find', {
+    enumerable: false,
+    configurable: true,
+    writable: true,
+    value: function(predicate) {
+      if (this == null) {
+        throw new TypeError('Array.prototype.find called on null or undefined');
+      }
+      if (typeof predicate !== 'function') {
+        throw new TypeError('predicate must be a function');
+      }
+      var list = Object(this);
+      var length = list.length >>> 0;
+      var thisArg = arguments[1];
+      var value;
 
+      for (var i = 0; i < length; i++) {
+        if (i in list) {
+          value = list[i];
+          if (predicate.call(thisArg, value, i, list)) {
+            return value;
+          }
+        }
+      }
+      return undefined;
+    }
+  });
+}
+%>
 </head>
 <body>
-  <% var now = moment();
-     var busyNow = function (fb) { return now.isAfter(fb.start) && now.isBefore(fb.end); };
+  <%
+      var now = moment();
+
+      function timeOrFromNow(d) {
+        var m = moment(d);
+        /* if more than 1 hour use the time */
+        if (m.diff(moment()) > 60 * 60 * 1000) {
+          return m.format('h:mma');
+        }
+        return m.fromNow();
+      }
+
+      function classAttrs(room) {
+        return room.neighborhood + " " + (room.vidyo)? "vidyo" : "";
+      }
+
+      var busyNow = function (fb) { return now.isAfter(fb.start) && now.isBefore(fb.end); };
+      var freeUntil = function (fb) { return now.isBefore(fb.end); };
+
+      var reallyBusy = busy.filter(function (room) {
+        return room.freebusy.some(function (fb) {
+          return now.isAfter(fb.start) && now.isBefore(moment(fb.end).subtract(10, 'minutes'));
+        });
+      });
+
+      var almostFree = busy.filter(function (room) {
+        return room.freebusy.some(function (fb) {
+          return now.isBefore(fb.end) && now.isAfter(moment(fb.end).subtract(10, 'minutes'));
+        });
+      });
+
+      var nextFb = function (room) {
+        var fb = room.freebusy.find(freeUntil);
+        if (fb) {
+          if (now.isAfter(fb.start) && now.isBefore(fb.end)) {
+            return "free " + timeOrFromNow(fb.end);
+          } else if (now.isBefore(fb.end)) {
+            return "busy " + timeOrFromNow(fb.end);
+          }
+        }
+        return "";
+      };
+
   %>
   <h2><%= title %></h2>
   <h5><%= moment().format('dddd, MMMM Do') %></h5>
-  <div id="rooms">
-    <div class="row">
-    <% rooms.sort(function (a,b) { return a.id > b.id; }).forEach(function(room, index) { %>
-      <div class="room <%= room.id %> <%= room.freebusy.some(busyNow)? "busy" : "" %>">
-        <span class="name"><%= room.name %></span>
-        <% room.freebusy.some(function(fb){ %>
-          <% if (now.isAfter(fb.start) && now.isBefore(fb.end)) { %>
-            <span class="fb">free <%= timeOrFromNow(fb.end) %></span>
-            <% return true; %>
-          <% } else { %>
-            <% if (now.isBefore(fb.end)) { %>
-              <span class="fb">busy <%= timeOrFromNow(fb.start) %></span>
-              <% return true; %>
-            <% } %>
-          <% } %>
-        <% return false; %>
-        <% }) %>
-      </div>
-      <% if (index === 3 || index === 7) { %> </div><div class="row"> <% } %>
-    <% }) %>
+  <div id="grid">
+
+    <div class="column busy">
+      <% reallyBusy.forEach(function (room) { %>
+        <div class="room <%= classAttrs(room) %>">
+          <span class="name"><%= room.name %></span>
+          <span class="fb"><%= nextFb(room) %></span>
+        </div>
+      <% }); %>
     </div>
+
+    <div class="column almostFree">
+      <% almostFree.forEach(function (room) { %>
+        <div class="room <%= classAttrs(room) %>">
+          <span class="name"><%= room.name %></span>
+          <span class="fb"><%= nextFb(room) %></span>
+        </div>
+      <% }); %>
+    </div>
+
+    <div class="column free">
+      <% free.forEach(function (room) { %>
+        <div class="room <%= classAttrs(room) %>">
+          <span class="name"><%= room.name %></span>
+          <span class="fb"><%= nextFb(room) %></span>
+        </div>
+      <% }); %>
+    </div>
+
   </div>
 
 </body>

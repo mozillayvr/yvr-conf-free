@@ -1,33 +1,23 @@
+@import url("bootstrap.min.css");
+
 body {
-  margin: auto;
-  text-align: center;
   font: 18pt Open Sans, Arial, sans-serif;
   color: #333;
   background-color: #315B8C; /* #1A3C65; */
 }
 h2, h5 {
   font-weight: 100;
-  margin: 8pt;
+  margin: 8pt 0;
 }
 h2 {
   color: #ccc;
 }
-h5 {
-  color: #eee;
-}
-
-.column {
-  width: 192pt;
-  display: inline-block;
-  vertical-align: top;
-}
 
 .room {
   position: relative;
-  display: inline-block;
-  width: 192pt;
-  height: 36pt;
-  margin: 4pt;
+  width: 100%;
+  height: 30pt;
+  margin: 4pt 0;
   text-align: left;
   font-variant: small-caps;
   background-color: #fff;
@@ -46,6 +36,10 @@ h5 {
 
 .room .name {
   margin: 4pt;
+}
+.room.medium {
+}
+.room.large {
 }
 
 .room .fb {

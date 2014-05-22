@@ -44,16 +44,16 @@ moment.lang('en', {
 var ics = "https://mail.mozilla.com/home/%s/Calendar?fmt=ifb&date=%s";
 
 // room names and ids for all the Mozilla YVR conference rooms
-var rooms = [ { name : "Siwash", id : "2a", neighborhood : "west", vidyo : true },
-              { name : "Buntzen", id : "2b", neighborhood : "west", vidyo : false },
-              { name : "Deep Cove", id : "2c", neighborhood : "west", vidyo : true },
-              { name : "Crazy Raven", id : "2e", neighborhood : "west", vidyo : true },
-              { name : "Lighthouse", id : "2d", neighborhood : "east", vidyo : false },
-              { name : "Wreck", id : "2f", neighborhood : "east", vidyo : false },
-              { name : "Dinky Peak", id : "2g", neighborhood : "east", vidyo : false },
-              { name : "Adanac", id : "2h", neighborhood : "east", vidyo : false },
+var rooms = [ { name : "Siwash", id : "2a", neighborhood : "west", vidyo : true, size : "medium" },
+              { name : "Buntzen", id : "2b", neighborhood : "west", vidyo : false, size : "small" },
+              { name : "Deep Cove", id : "2c", neighborhood : "west", vidyo : true, size : "medium" },
+              { name : "Crazy Raven", id : "2e", neighborhood : "west", vidyo : true, size : "medium" },
+              { name : "Lighthouse", id : "2d", neighborhood : "east", vidyo : false, size : "small" },
+              { name : "Wreck", id : "2f", neighborhood : "east", vidyo : false, size : "small" },
+              { name : "Dinky Peak", id : "2g", neighborhood : "east", vidyo : false, size : "small" },
+              { name : "Adanac", id : "2h", neighborhood : "east", vidyo : false, size : "small" },
               // not sure I should be including this one
-              { name : "Whytecliff", id : "commons", neighborhood : "central", vidyo : true }
+              { name : "Whytecliff", id : "commons", neighborhood : "central", vidyo : true, size : "large" }
             ].map(function(i) { i.freebusy = []; return i;});
 
 // util function to convert a Mozilla room id into a YVR

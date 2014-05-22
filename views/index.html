@@ -41,6 +41,7 @@ if (!Array.prototype.find) {
 <body>
   <%
       var now = moment();
+      var BUSY_FUZZ = 15;
 
       function timeOrFromNow(d) {
         var m = moment(d);
@@ -52,7 +53,8 @@ if (!Array.prototype.find) {
       }
 
       function classAttrs(room) {
-        return room.neighborhood + " " + (room.vidyo)? "vidyo" : "";
+        var vidyo = (room.vidyo)? "vidyo" : "";
+        return [vidyo, room.neighborhood, room.size].join(" ");
       }
 
       var busyNow = function (fb) { return now.isAfter(fb.start) && now.isBefore(fb.end); };
@@ -60,13 +62,13 @@ if (!Array.prototype.find) {
 
       var reallyBusy = busy.filter(function (room) {
         return room.freebusy.some(function (fb) {
-          return now.isAfter(fb.start) && now.isBefore(moment(fb.end).subtract(10, 'minutes'));
+          return now.isAfter(fb.start) && now.isBefore(moment(fb.end).subtract(BUSY_FUZZ, 'minutes'));
         });
       });
 
       var almostFree = busy.filter(function (room) {
         return room.freebusy.some(function (fb) {
-          return now.isBefore(fb.end) && now.isAfter(moment(fb.end).subtract(10, 'minutes'));
+          return now.isBefore(fb.end) && now.isAfter(moment(fb.end).subtract(BUSY_FUZZ, 'minutes'));
         });
       });
 
@@ -83,12 +85,15 @@ if (!Array.prototype.find) {
       };
 
   %>
-  <h2><%= title %></h2>
-  <h5><%= moment().format('dddd, MMMM Do') %></h5>
-  <div id="grid">
+  <div class="container-fluid">
+  <h2 class="pull-left"><%= title %></h2>
+  <h2 class="pull-right"><small><%= moment().format('dddd, MMMM Do') %></small></h2>
+  <div class="clearfix"></div>
 
-    <div class="column busy">
-      <% reallyBusy.forEach(function (room) { %>
+  <div class="row">
+
+    <div class="col-sm-4 col-sm-push-8 free">
+      <% free.forEach(function (room) { %>
         <div class="room <%= classAttrs(room) %>">
           <span class="name"><%= room.name %></span>
           <span class="fb"><%= nextFb(room) %></span>
@@ -96,7 +101,7 @@ if (!Array.prototype.find) {
       <% }); %>
     </div>
 
-    <div class="column almostFree">
+    <div class="col-sm-4 almostFree">
       <% almostFree.forEach(function (room) { %>
         <div class="room <%= classAttrs(room) %>">
           <span class="name"><%= room.name %></span>
@@ -105,8 +110,8 @@ if (!Array.prototype.find) {
       <% }); %>
     </div>
 
-    <div class="column free">
-      <% free.forEach(function (room) { %>
+    <div class="col-sm-4 col-sm-pull-8 busy">
+      <% reallyBusy.forEach(function (room) { %>
         <div class="room <%= classAttrs(room) %>">
           <span class="name"><%= room.name %></span>
           <span class="fb"><%= nextFb(room) %></span>
@@ -116,5 +121,6 @@ if (!Array.prototype.find) {
 
   </div>
 
+  </div>
 </body>
 </html>

@@ -1,7 +1,9 @@
 yvr-conf-free
 =============
 
-A node.js server that gathers the Mozilla YVR conference room FreeBusy information in an effort to display the conference rooms that are currently available for use.
+A node.js server that gathers the Mozilla YVR conference room FreeBusy information in an effort to display the conference rooms that are currently available for use. You can see a working example at:
+
+* http://yvr-conf-free.paas.allizom.org/
 
 Getting Started
 =============

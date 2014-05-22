@@ -1,0 +1,6 @@
+name: yvr-conf-free
+
+framework:
+  type: node
+
+mem: 64M

@@ -25,19 +25,12 @@ Endpoints and API
 
 ( NOTE: currently busy and free also includes a 5 min start time 'fuzz' where a room will be included if it is about to become free or busy )
 
-Current Status
+Screenshot
 =============
 
-TODO
-- [ ] Make a nice looking HTML widget
+http://f.cl.ly/items/0F3C3i0g1l2p0U0e2v06/yvr-conf-free.png
 
-- [x] Collect relevant iCal information locally
-- [x] Update the Date daily to change the query URL
-- [x] Serve HTML
-- [x] Our iCal library now handles FreeBusy information
-- [x] This Node.js file grabs all the FB data for Mozilla YVR
-
-Supported Conference Rooms
+YVR Supported Conference Rooms
 =============
 
 * Siwash : yvr-2a

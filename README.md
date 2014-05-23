@@ -8,7 +8,6 @@ A node.js server that gathers the Mozilla YVR conference room FreeBusy informati
 Getting Started
 =============
 
-    npm install
     npm start
 
 Endpoints and API

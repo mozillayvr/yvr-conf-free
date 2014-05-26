@@ -11,6 +11,7 @@
 var ical = require('ical');
 
 var format = require('util').format;
+var path = require('path');
 
 var express = require('express');
 
@@ -38,22 +39,21 @@ moment.lang('en', {
     }
 });
 
-
 // ICS calendar URL format, first %s requires email, second %s requires date in 20140516 format
 // thanks to this: http://www.zimbra.com/forums/users/16877-only-publish-free-busy-information-icalendar.html#post88423
 var ics = "https://mail.mozilla.com/home/%s/Calendar?fmt=ifb&date=%s";
 
 // room names and ids for all the Mozilla YVR conference rooms
-var rooms = [ { name : "Siwash", id : "2a", neighborhood : "west", vidyo : true, size : "medium" },
-              { name : "Buntzen", id : "2b", neighborhood : "west", vidyo : false, size : "small" },
-              { name : "Deep Cove", id : "2c", neighborhood : "west", vidyo : true, size : "medium" },
-              { name : "Crazy Raven", id : "2e", neighborhood : "west", vidyo : true, size : "medium" },
-              { name : "Lighthouse", id : "2d", neighborhood : "east", vidyo : false, size : "small" },
-              { name : "Wreck", id : "2f", neighborhood : "east", vidyo : false, size : "small" },
-              { name : "Dinky Peak", id : "2g", neighborhood : "east", vidyo : false, size : "small" },
-              { name : "Adanac", id : "2h", neighborhood : "east", vidyo : false, size : "small" },
+var rooms = [ { name : "Siwash", id : "2a", neighborhood : "west", vidyo : true, size : 2 },
+              { name : "Buntzen", id : "2b", neighborhood : "west", vidyo : false, size : 2 },
+              { name : "Deep Cove", id : "2c", neighborhood : "west", vidyo : true, size : 2 },
+              { name : "Crazy Raven", id : "2e", neighborhood : "west", vidyo : true, size : 2 },
+              { name : "Lighthouse", id : "2d", neighborhood : "east", vidyo : false, size : 1 },
+              { name : "Wreck", id : "2f", neighborhood : "east", vidyo : false, size : 1 },
+              { name : "Dinky Peak", id : "2g", neighborhood : "east", vidyo : false, size : 1 },
+              { name : "Adanac", id : "2h", neighborhood : "east", vidyo : false, size : 1 },
               // not sure I should be including this one
-              { name : "Whytecliff", id : "commons", neighborhood : "central", vidyo : true, size : "large" }
+              { name : "Whytecliff", id : "commons", neighborhood : "central", vidyo : true, size : 3 }
             ].map(function(i) { i.freebusy = []; return i;});
 
 // util function to convert a Mozilla room id into a YVR
@@ -99,7 +99,6 @@ function getFreeBusy() {
     );
   });
 
-
   // add CALENDAR_INTERVAL min or the remainder of CALENDAR_INTERVAL min
   now.add('minutes', (CALENDAR_INTERVAL - (now.minutes() % CALENDAR_INTERVAL)));
   console.log("next run", now.fromNow());
@@ -143,23 +142,18 @@ app.use(express.static(__dirname + '/public'));
 // JSON API
 
 app.get('/api/rooms', function(req, res, next){
-  res.send(rooms);
+  res.send({ fuzz : 0, rooms : rooms });
 });
 
 app.get('/api/rooms/free', function(req, res, next){
-  res.send(free(rooms));
+  res.send({ fuzz : BUSY_FUZZ, rooms : free(rooms) });
 });
 
 app.get('/api/rooms/busy', function(req, res, next){
-  res.send(busy(rooms));
+  res.send({ fuzz : BUSY_FUZZ, rooms : busy(rooms) });
 });
 
 // HTML WIDGET
-
-// expose moment to ejs
-app.locals.moment = function(date) {
-  return moment(date);
-}
 
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + '/views');
@@ -167,11 +161,12 @@ app.set('view engine', 'html');
 
 app.get('/', function(req, res){
   res.render('index', {
-    rooms: rooms,
-    busy: busy(rooms),
-    free: free(rooms),
     title: "YVR Conference Rooms"
   });
+});
+
+app.get('/js/moment.js', function (req,res) {
+  res.sendfile(path.join(__dirname,'node_modules','moment','moment.js'));
 });
 
 var server = app.listen(Number(process.env.PORT || 5000), function() {

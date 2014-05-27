@@ -27,7 +27,7 @@ Endpoints and API
 Screenshot
 =============
 
-http://f.cl.ly/items/0F3C3i0g1l2p0U0e2v06/yvr-conf-free.png
+http://cl.ly/image/0C0k0x0Q2I2g
 
 YVR Supported Conference Rooms
 =============

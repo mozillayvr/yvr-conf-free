@@ -101,14 +101,14 @@
         return (
           <div className={freebusy.classes}>
             <div className="name">{this.props.room.name}</div>
-            <div className="attrs clearfix">
-              <Dudes size={this.props.room.size} />
-              <span className={(this.props.room.vidyo) ? 'glyphicon glyphicon-facetime-video' : ''} ></span>
-            </div>
             <span className="glyphicon glyphicon-ok"></span>
             <div className="fb">
               <div>{freebusy.text}</div>
               <div>{freebusy.when}</div>
+              <div className="attrs">
+                <Dudes size={this.props.room.size} />
+                <span className={(this.props.room.vidyo) ? 'pull-left glyphicon glyphicon-facetime-video' : ''} ></span>
+              </div>
             </div>
           </div>
         );

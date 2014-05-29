@@ -37,11 +37,22 @@
      */
     // The above declaration must remain intact at the top of the script.
     // Your code here
+    var BUSY_FUZZ = 5;
 
-    var RoomMixin = {
+    var Dudes = React.createClass({
+      render : function () {
+        var dudes = new Array(this.props.size);
+        for (var i = 0; i < this.props.size; i += 1) {
+          dudes.push(<span key={i} className='glyphicon glyphicon-user pull-right'></span>);
+        }
+        return (
+          <span className="dudes">{dudes}</span>
+        );
+      }
+    });
+    var Room = React.createClass({
       freebusy: function() {
         var now = moment();
-        var BUSY_FUZZ = 15;
         var isBusy = false,
             willBeBusy = false,
             moreThanOneHour = true,
@@ -85,21 +96,7 @@
         cxs['room-neighborhood-' + this.props.room.neighborhood] = true;
         cxs['room-size-' + this.props.room.size] = true;
         return { classes : React.addons.classSet(cxs), text : text, when : when };
-      }
-    };
-    var Dudes = React.createClass({
-      render : function () {
-        var dudes = new Array(this.props.size);
-        for (var i = 0; i < this.props.size; i += 1) {
-          dudes.push(<span key={i} className='glyphicon glyphicon-user pull-right'></span>);
-        }
-        return (
-          <span className="dudes">{dudes}</span>
-        );
-      }
-    });
-    var Room = React.createClass({
-      mixins: [RoomMixin], // Use the mixin
+      },
       render : function () {
 
         if (!this.props.room) {
@@ -113,7 +110,7 @@
         var height = (this.props.room.size > 2) ? ($(window).height() + 20) : ($(window).height());
         // Here we just grab the padding we are aware of and adjust for it
         var padding = $("body").innerHeight() - $("body").height();
-        height -= (padding * 2) + $("h2").height() * 2;
+        height -= (padding * 2) + $("h2").height() * 2.2;
         // For the large room we wanted to make it take the whole height
         // All other rooms want only half the height
         height = (this.props.room.size > 2) ? height : height / 2;
@@ -148,15 +145,13 @@
         });
       },
       getInitialState: function() {
-        return { fuzz : 15, rooms : [] };
+        return { rooms : [] };
       },
       componentWillMount: function() {
         this.loadRoomsFromServer();
         setInterval(this.loadRoomsFromServer, 60 * 1000);
       },
       render: function() {
-        var BUSY_FUZZ = 15;
-
         var findRoom = function(id) {
           return this.state.rooms.find(function (room) { return room.id == id; });
         }.bind(this);
@@ -164,23 +159,23 @@
         return (
           <div className="row">
             <div className="col-md-2">
-              <Room fuzz={BUSY_FUZZ} room={findRoom("2a")} />
-              <Room fuzz={BUSY_FUZZ} room={findRoom("2b")} />
+              <Room room={findRoom("2a")} />
+              <Room room={findRoom("2b")} />
             </div>
             <div className="col-md-2">
-              <Room fuzz={BUSY_FUZZ} room={findRoom("2c")} />
-              <Room fuzz={BUSY_FUZZ} room={findRoom("2e")} />
+              <Room room={findRoom("2c")} />
+              <Room room={findRoom("2e")} />
             </div>
             <div className="col-md-2">
-              <Room fuzz={BUSY_FUZZ} room={findRoom("commons")} />
+              <Room room={findRoom("commons")} />
             </div>
             <div className="col-md-2">
-              <Room fuzz={BUSY_FUZZ} room={findRoom("2d")} />
-              <Room fuzz={BUSY_FUZZ} room={findRoom("2f")} />
+              <Room room={findRoom("2d")} />
+              <Room room={findRoom("2f")} />
             </div>
             <div className="col-md-2">
-              <Room fuzz={BUSY_FUZZ} room={findRoom("2g")} />
-              <Room fuzz={BUSY_FUZZ} room={findRoom("2h")} />
+              <Room room={findRoom("2g")} />
+              <Room room={findRoom("2h")} />
             </div>
           </div>
         );

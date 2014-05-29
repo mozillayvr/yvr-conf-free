@@ -47,10 +47,11 @@ if (!Array.prototype.find) {
 }
 
 function setDate() {
-    $("#date").text(moment().format('dddd, MMMM Do'));
+    $("#date").text(moment().format('ddd, MMMM Do'));
+    $("#time").text(moment().format('h:mm a'));
 }
 
 $(document).ready(function () {
-    setDate();
-    setInterval(setDate, 60 * 60 * 1000);
+  setDate();
+  setInterval(setDate, 60 * 60 * 1000);
 });

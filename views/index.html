@@ -20,12 +20,14 @@
 
   <div class="container-fluid">
 
-    <h2 class="pull-left"><%= title %></h2>
+    <h2 class="pull-left" id="time"></h2>
     <h2 class="pull-right" id="date"></h2>
 
     <div class="clearfix"></div>
 
     <div id="content"></div>
+
+    <h2 class="text-center"><%= title %></h2>
 
   </div>
 
@@ -39,24 +41,31 @@
     var RoomMixin = {
       freebusy: function() {
         var now = moment();
+        var BUSY_FUZZ = 15;
         var isBusy = false,
             willBeBusy = false,
-            moreThanOneHour = true;
+            moreThanOneHour = true,
+            withInFuzzOfEnd = false,
+            withInFuzzOfStart = false,
+            fbs = this.props.room.freebusy.sort(function (a, b) { return moment(a.end) > moment(b.end); });
 
         var text = "", when = "";
-        var fb = this.props.room.freebusy.find(function (fb) { return now.isBefore(fb.end); });
+        var fb = fbs.find(function (fb) { return now.isBefore(fb.end); });
 
         if (fb) {
           willBeBusy = (now.isBefore(fb.end));
           isBusy = (now.isAfter(fb.start) && willBeBusy);
-          moreThanOneHour = (moment(fb.end).diff() > 60 * 60 * 1000);
+          moreThanOneHour = (moment(fb.end).diff() > 60 * 60 * 1000),
+          withInFuzzOfEnd = (moment(fb.end).diff() < BUSY_FUZZ * 60 * 1000),
+          withInFuzzOfStart = (moment(fb.start).diff() < BUSY_FUZZ * 60 * 1000);
 
-          when = (moreThanOneHour) ? moment(fb.end).format('h:mma') : moment(fb.end).fromNow();
 
           if (isBusy) {
             text = "free";
+            when = (moreThanOneHour) ? moment(fb.end).format('h:mma') : moment(fb.end).fromNow();
           } else if (willBeBusy) {
             text = "booked";
+            when = (moreThanOneHour) ? moment(fb.start).format('h:mma') : moment(fb.start).fromNow();
           }
           text += (moreThanOneHour) ? " at" : " in";
 
@@ -69,8 +78,9 @@
           'room-vidyo' : this.props.room.vidyo,
           'room-free' : (!isBusy),
           'room-busy' : isBusy,
-          'room-free-soon' : (isBusy && !moreThanOneHour),
-          'room-busy-soon' : (!isBusy && !moreThanOneHour)
+          'room-free-soon' : (isBusy && withInFuzzOfEnd),
+          'room-busy-soon' : (!isBusy && withInFuzzOfStart),
+          'room-busy-later' : (!isBusy && willBeBusy)
         };
         cxs['room-neighborhood-' + this.props.room.neighborhood] = true;
         cxs['room-size-' + this.props.room.size] = true;
@@ -98,8 +108,22 @@
 
         var freebusy = this.freebusy();
 
+        // Terrible hack :(
+        // The random 20 value is equal to the px of margin between the small boxes
+        var height = (this.props.room.size > 2) ? ($(window).height() + 20) : ($(window).height());
+        // Here we just grab the padding we are aware of and adjust for it
+        var padding = $("body").innerHeight() - $("body").height();
+        height -= (padding * 2) + $("h2").height() * 2;
+        // For the large room we wanted to make it take the whole height
+        // All other rooms want only half the height
+        height = (this.props.room.size > 2) ? height : height / 2;
+
+        var divStyle = {
+          height : height
+        };
+
         return (
-          <div className={freebusy.classes}>
+          <div style={divStyle} className={freebusy.classes}>
             <div className="name">{this.props.room.name}</div>
             <span className="glyphicon glyphicon-ok"></span>
             <div className="fb">

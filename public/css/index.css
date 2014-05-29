@@ -22,9 +22,10 @@
   }
 }
 
-@media (min-width: 1200px) {
-  body {
+@media (min-width: 1800px) {
+  .room {
     font-weight: bold;
+    font-size: 36px;
   }
 }
 
@@ -39,7 +40,7 @@ h2 {
 
 .room {
   position: relative;
-  margin: 20px 0;
+  margin-bottom: 20px;
   padding: 10px;
   text-align: center;
   transition: background-color 0.5s ease;
@@ -50,17 +51,26 @@ h2 {
   padding: 0 10px;
 }
 
+.room .name,
 .room .glyphicon-ok {
   position: relative;
   display: block;
-  font-size: 48px;
   text-align: center;
   top: 25%;
 }
 
+.room .glyphicon-ok {
+  font-size: 48px;
+}
+
 .room.room-busy .glyphicon-ok,
-.room.room-busy-soon .glyphicon-ok {
+.room.room-busy-soon .glyphicon-ok,
+.room.room-busy-later .glyphicon-ok {
   display: none;
+}
+
+.room.room-neighborhood-central.room-size-3 {
+  margin: 0 !important;
 }
 
 .room-size-1 {
@@ -81,6 +91,9 @@ h2 {
 }
 .room-busy-soon {
   background-color: #EBC300 !important;
+}
+.room-busy-soon .name {
+  color: #333 !important;
 }
 .room-free {
   background-color: #27B648;

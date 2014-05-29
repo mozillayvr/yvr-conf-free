@@ -45,7 +45,7 @@ var ics = "https://mail.mozilla.com/home/%s/Calendar?fmt=ifb&date=%s";
 
 // room names and ids for all the Mozilla YVR conference rooms
 var rooms = [ { name : "Siwash", id : "2a", neighborhood : "west", vidyo : true, size : 2 },
-              { name : "Buntzen", id : "2b", neighborhood : "west", vidyo : false, size : 2 },
+              { name : "Buntzen", id : "2b", neighborhood : "west", vidyo : false, size : 1 },
               { name : "Deep Cove", id : "2c", neighborhood : "west", vidyo : true, size : 2 },
               { name : "Crazy Raven", id : "2e", neighborhood : "west", vidyo : true, size : 2 },
               { name : "Lighthouse", id : "2d", neighborhood : "east", vidyo : false, size : 1 },

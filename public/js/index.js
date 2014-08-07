@@ -53,5 +53,5 @@ function setDate() {
 
 $(document).ready(function () {
   setDate();
-  setInterval(setDate, 60 * 60 * 1000);
+  setInterval(setDate, 60 * 1000);
 });

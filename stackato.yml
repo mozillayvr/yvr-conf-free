@@ -1,4 +1,4 @@
-name: yvr-conf-free
+name: yvr-conf
 
 framework:
   type: node

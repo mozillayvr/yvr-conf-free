@@ -47,9 +47,21 @@ h2 {
   right: 4vh;
   text-align: right;
 }
+:fullscreen {
+  cursor: none;
+}
+:-moz-full-screen {
+  cursor: none;
+}
+:-webkit-full-screen {
+  cursor: none;
+}
 /* Class rules to show the overlay. */
 .show-overlay #overlay {
   opacity: 1;
+}
+.show-overlay {
+  cursor: auto;
 }
 #overlay button {
   border: 0;

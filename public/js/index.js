@@ -54,4 +54,65 @@ function setDate() {
 $(document).ready(function () {
   setDate();
   setInterval(setDate, 60 * 1000);
+  setupOverlay();
 });
+
+// Fullscreen support.
+function setupOverlay() {
+  // Show overlay after mouse move.
+  var overlayTimeout;
+  document.body.addEventListener('mousemove', function(e) {
+    document.body.classList.add('show-overlay');
+    clearTimeout(overlayTimeout);
+    overlayTimeout = setTimeout(function () {
+      document.body.classList.remove('show-overlay');
+    }, 3000);
+  });
+  // Enable fullscreen button.
+  setupFullscreen();
+}
+
+function setupFullscreen() {
+  var contentElem = document.body;
+
+  document.addEventListener('keydown', function (e) {
+    // 70 is "f"
+    if (e.keyCode === 70) {
+      toggleFullScreen(contentElem);
+    }
+  });
+  document.querySelector('#fullscreen').addEventListener('click', function (e) {
+    toggleFullScreen(contentElem);
+  });
+}
+
+function requestFullscreen(elem) {
+  (elem.requestFullscreen ||
+   elem.msRequestFullScreen ||
+   elem.mozRequestFullScreen ||
+   elem.webkitRequestFullScreen ||
+   function(){}).call(elem, Element.ALLOW_KEYBOARD_INPUT);
+}
+
+function cancelFullScreen() {
+  (document.exitFullscreen ||
+   document.msExitFullscreen ||
+   document.mozCancelFullScreen ||
+   document.webkitExitFullscreen ||
+   function(){}).call(document);
+}
+
+function isFullScreen() {
+  return !!(document.fullscreenElement ||
+            document.mozFullScreenElement ||
+            document.webkitFullscreenElement ||
+            document.msFullscreenElement);
+}
+
+function toggleFullScreen(elem) {
+  if (isFullScreen()) {
+    cancelFullScreen();
+  } else {
+    requestFullscreen(elem);
+  }
+}

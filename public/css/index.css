@@ -38,6 +38,27 @@ h2 {
   color: #FAFAFA;
 }
 
+/* Control help overlay hidden by default. */
+#overlay {
+  opacity: 0;
+  transition: .4s opacity ease-out;
+  position: absolute;
+  bottom: 4vh;
+  right: 4vh;
+  text-align: right;
+}
+/* Class rules to show the overlay. */
+.show-overlay #overlay {
+  opacity: 1;
+}
+#overlay button {
+  border: 0;
+  padding: .5em 1em;
+  background: #000;
+  color: #FAFAFA;
+  border-radius: 1vh;
+}
+
 .room {
   position: relative;
   margin-bottom: 20px;

@@ -115,4 +115,6 @@ function toggleFullScreen(elem) {
   } else {
     requestFullscreen(elem);
   }
+  fullscreenTransitionDelay = 500;
+  setInterval(triggerLayout, fullscreenTransitionDelay);
 }

@@ -196,10 +196,14 @@
       }
     });
     React.initializeTouchEvents(true);
-    React.renderComponent(
-      <Rooms />,
-      document.getElementById('content')
-    );
+    triggerLayout();
+
+    function triggerLayout() {
+      React.renderComponent(
+        <Rooms />,
+        document.getElementById('content')
+      );
+    }
   </script>
 </body>
 </html>

@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name=viewport content="width=device-width, initial-scale=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %></title>
 
@@ -18,32 +17,32 @@
 </head>
 <body>
 
-  <div class="container-fluid">
+  <div id="contain">
+    <h1 class="title"><%= title %></h1>
 
-    <h2 class="pull-left" id="time"></h2>
-    <h2 class="pull-right" id="date"></h2>
-
-    <div class="clearfix"></div>
+    <div class="now">
+      <div id="time"></div>
+      <div id="date"></div>
+    </div>
 
     <div id="content"></div>
 
-    <h2 class="text-center"><%= title %></h2>
-
-    <div id="overlay">
-      <button id="fullscreen">Fullscreen (f)</button>
-      <script type="text/javascript">
-        window.addEventListener('mozfullscreenchange', function() {
-          var button = document.querySelector('#fullscreen');
-          if (isFullScreen) {
-            button.textContent = 'Leave Fullscreen (f)';
-          } else {
-            button.textContent = 'Fullscreen (f)';
-          }
-        });
-      </script>
-    </div>
-
   </div>
+
+  <div id="overlay">
+    <button id="fullscreen">Fullscreen (f)</button>
+    <script type="text/javascript">
+      window.addEventListener('mozfullscreenchange', function() {
+        var button = document.querySelector('#fullscreen');
+        if (isFullScreen) {
+          button.textContent = 'Leave Fullscreen (f)';
+        } else {
+          button.textContent = 'Fullscreen (f)';
+        }
+      });
+    </script>
+  </div>
+
 
   <script type="text/jsx">
     /**
@@ -57,10 +56,11 @@
       render : function () {
         var dudes = new Array(this.props.size);
         for (var i = 0; i < this.props.size; i += 1) {
-          dudes.push(<span key={i} className='glyphicon glyphicon-user pull-right'></span>);
+          dudes.push(<span key={i} className='fa fa-user' aria-hidden="true"></span>);
         }
+        var capacity = new Array("small", "medium", "large");
         return (
-          <span className="dudes">{dudes}</span>
+          <div className="size">{dudes} <span className="offscreen">{capacity[this.props.size]}</span></div>
         );
       }
     });
@@ -92,7 +92,7 @@
             text = "booked";
             when = (moreThanOneHour) ? moment(fb.start).format('h:mma') : moment(fb.start).fromNow();
           }
-          text += (moreThanOneHour) ? " at" : " in";
+          text += (moreThanOneHour) ? " at " : " in ";
 
         } else {
           isBusy = false
@@ -119,33 +119,33 @@
 
         var freebusy = this.freebusy();
 
-        // Terrible hack :(
-        // The random 20 value is equal to the px of margin between the small boxes
-        var height = (this.props.room.size > 2) ? ($(window).height() + 20) : ($(window).height());
-        // Here we just grab the padding we are aware of and adjust for it
-        var padding = $("body").innerHeight() - $("body").height();
-        height -= (padding * 2) + $("h2").height() * 2.2;
-        // For the large room we wanted to make it take the whole height
-        // All other rooms want only half the height
-        height = (this.props.room.size > 2) ? height : height / 2;
-
-        var divStyle = {
-          height : height
-        };
+        var roomClasses =  freebusy.classes;
+        var roomNameClass = this.props.room.name;
+        roomNameClass = roomNameClass.replace(/\s+/g, '');
+        roomNameClass = roomNameClass.toLowerCase();
+        roomClasses += ' ' + roomNameClass;
 
         return (
-          <div style={divStyle} className={freebusy.classes}>
-            <div className="name">{this.props.room.name}</div>
-            <span className="glyphicon glyphicon-ok"></span>
-            <div className="fb">
-              <div>{freebusy.text}</div>
-              <div>{freebusy.when}</div>
-              <div className="attrs">
-                <Dudes size={this.props.room.size} />
-                <span className={(this.props.room.vidyo) ? 'pull-left glyphicon glyphicon-facetime-video' : ''} ></span>
+
+          <article className={roomClasses}>
+            <div className="info">
+              <h2 className="name">{this.props.room.name}</h2>
+              <div className="check">
+                <span className="fa fa-check" aria-hidden="true"></span>
               </div>
             </div>
-          </div>
+            <div className="attrs">
+              <div className="fb">
+                <span className="fb-text">{freebusy.text}</span>
+                <span className="fb-when">{freebusy.when}</span>
+              </div>
+              <Dudes size={this.props.room.size} />
+              <div className="vidyo">
+                  <span className={(this.props.room.vidyo) ? 'fa fa-video-camera ' : ''} aria-hidden="true"></span>
+                  <span className="offscreen">{(this.props.room.vidyo) ? 'Vidyo Support' : ''}</span>
+              </div>
+            </div>
+          </article>
         );
       }
     });
@@ -171,26 +171,22 @@
         }.bind(this);
 
         return (
-          <div className="row">
-            <div className="col-md-2">
-              <Room room={findRoom("2a")} />
-              <Room room={findRoom("2b")} />
-            </div>
-            <div className="col-md-2">
-              <Room room={findRoom("2c")} />
-              <Room room={findRoom("2e")} />
-            </div>
-            <div className="col-md-2">
-              <Room room={findRoom("commons")} />
-            </div>
-            <div className="col-md-2">
-              <Room room={findRoom("2d")} />
-              <Room room={findRoom("2f")} />
-            </div>
-            <div className="col-md-2">
-              <Room room={findRoom("2g")} />
-              <Room room={findRoom("2h")} />
-            </div>
+          <div className="rooms">
+
+            <Room room={findRoom("2a")} />
+            <Room room={findRoom("2b")} />
+
+            <Room room={findRoom("2c")} />
+            <Room room={findRoom("2e")} />
+
+            <Room room={findRoom("commons")} />
+
+            <Room room={findRoom("2d")} />
+            <Room room={findRoom("2f")} />
+
+            <Room room={findRoom("2g")} />
+            <Room room={findRoom("2h")} />
+
           </div>
         );
       }

@@ -16,7 +16,7 @@
     "room"
   ],
   "dependencies": {
-    "ical": "^0.3.1",
+    "ical": "0.3.1",
     "ejs": "~1.0.0",
     "express": "4.3.0",
     "moment": "2.6.0"

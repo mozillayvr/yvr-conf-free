@@ -4,7 +4,8 @@
   "author": "Bryan Clark <clarkbw@gmail.com>",
   "description": "A Node server that gathers the free/busy calendar information for conference rooms in Mozilla YVR",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "push" : "stackato push yvr-conf"
   },
   "repository": {
     "type": "git",

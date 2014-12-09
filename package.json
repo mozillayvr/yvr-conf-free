@@ -15,11 +15,11 @@
     "conference",
     "room"
   ],
-  "dependencies" : {
-    "ical"    : "clarkbw/ical.js",
-    "express" : "4.3.0",
-    "ejs"     : "~1.0.0",
-    "moment"  : "2.6.0"
+  "dependencies": {
+    "ical": "^0.3.1",
+    "ejs": "~1.0.0",
+    "express": "4.3.0",
+    "moment": "2.6.0"
   },
   "license": "MPL",
   "engines": {

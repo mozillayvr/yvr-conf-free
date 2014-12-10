@@ -16,6 +16,8 @@ var express = require('express');
 
 var moment = require('moment');
 
+var _ = require('underscore');
+
 var config = require('config');
 
 var CALENDAR_INTERVAL = config.get('ics.calender-interval');; // in minutes
@@ -28,24 +30,23 @@ var ics = config.get('ics.url');
 
 var rooms = config.get('ics.rooms').map(
   function transform(i) {
-    i.freebusy = [];
     i.email = "yvr-" + i.id + "@mozilla.com";
     return i;
   }
 );
 
-function todayFilter(m, fb) {
-  // we only need the items that are within today's free/busy timeframe
-  return m.isSame(fb.start, 'day') || m.isSame(fb.end, 'day') ||
-         m.isAfter(fb.start) && m.isBefore(fb.end);
-}
-
 function getFreeBusy() {
   var now = moment();
+  var todayFilter = function(fb) {
+    // we only need the items that are within today's free/busy timeframe
+    return now.isSame(fb.start, 'day') ||
+           now.isSame(fb.end, 'day') ||
+           now.isAfter(fb.start) && now.isBefore(fb.end);
+  };
 
   console.log("getFreeBusy", now.format('h:mma'));
 
-  rooms.forEach(function (room) {
+  _.each(rooms, function (room) {
     // ICS calendar URL format: 
     //  first %s requires email, 
     //  second %s requires date in YYYMMMDDD (20140516) format
@@ -53,21 +54,12 @@ function getFreeBusy() {
 
     ical.fromURL(url, {},
       function(err, data) {
-        if (err) { throw err; }
-
-        var today = todayFilter.bind(undefined, now);
-
-        for (var k in data){
-          if (data.hasOwnProperty(k)){
-            var ev = data[k];
-            if (ev.type && ev.type === "VFREEBUSY" && typeof ev.freebusy !== "undefined") {
-              room.freebusy = ev.freebusy.filter(today);
-            } else {
-              room.freebusy = [];
-            }
-          }
-        }
-
+        if (err) { console.error(err); return err; }
+        // strip down the information to lists of Free Busy arrays
+        data = _.pluck(_.where(data, {type : 'VFREEBUSY'}), 'freebusy');
+        // Merge the arrays and convert the undefined items into empty arrays
+        //  Filter to only the data relevant to today
+        room.freebusy = _.filter(_.flatten(_.compact(data)), todayFilter);
       }
     );
   });
@@ -85,21 +77,21 @@ function getFreeBusy() {
 // that is about to be free or about to be busy
 function busy(rs) {
   var now = moment();
-  return rs.filter(function (room) {
-    return room.freebusy && room.freebusy.some(function (fb) {
+  return _.filter(rs, function (room) {
+    return _.some(room.freebusy, function (fb) {
       var fuzzStart = moment(fb.start).subtract('minutes', BUSY_FUZZ);
       // console.log(room.name, "busy", fuzzStart.fromNow(), "and free again", moment(fb.end).fromNow());
-      return fb.type === "BUSY" && now.isAfter(fuzzStart) && now.isBefore(fb.end);
+      return _.isBusy(fb) && now.isAfter(fuzzStart) && now.isBefore(fb.end);
     });
   });
 }
 
 function free(rs) {
   var now = moment();
-  return rs.filter(function (room) {
-    return room.freebusy && room.freebusy.every(function (fb) {
+  return _.filter(rs, function (room) {
+    return _.some(room.freebusy, function (fb) {
       var fuzzStart = moment(fb.start).subtract('minutes', BUSY_FUZZ);
-      var isFree = (fb.type === "FREE" && now.isAfter(fuzzStart) && now.isBefore(fb.end));
+      var isFree = (_.isFree(fb) && now.isAfter(fuzzStart) && now.isBefore(fb.end));
       var isNotNow = !(now.isAfter(fb.start) && now.isBefore(fb.end));
       return (isFree || isNotNow);
     });

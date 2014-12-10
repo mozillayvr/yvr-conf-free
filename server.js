@@ -7,7 +7,6 @@
 
 "use strict";
 
-// https://www.npmjs.org/package/ical
 var ical = require('ical');
 
 var format = require('util').format;
@@ -17,49 +16,28 @@ var express = require('express');
 
 var moment = require('moment');
 
-var CALENDAR_INTERVAL = 5; // in minutes
+var config = require('config');
 
-var BUSY_FUZZ = 15;
+var CALENDAR_INTERVAL = config.get('ics.calender-interval');; // in minutes
 
-moment.lang('en', {
-    relativeTime : {
-        future: "in %s",
-        past:   "%s ago",
-        s:  "a jiff",
-        m:  "%dm",
-        mm: "%dm",
-        h:  "%dh",
-        hh: "%dh",
-        d:  "a day",
-        dd: "%d days",
-        M:  "a month",
-        MM: "%d months",
-        y:  "a year",
-        yy: "%d years"
-    }
-});
+var BUSY_FUZZ = config.get('ics.busy-fuzz');
 
-// ICS calendar URL format, first %s requires email, second %s requires date in 20140516 format
-// thanks to this: http://www.zimbra.com/forums/users/16877-only-publish-free-busy-information-icalendar.html#post88423
-var ics = "https://mail.mozilla.com/home/%s/Calendar?fmt=ifb&date=%s";
+moment.lang('en', config.get('moment.en'));
 
-// room names and ids for all the Mozilla YVR conference rooms
-var rooms = [ { name : "Siwash", id : "2a", neighborhood : "west", vidyo : true, size : 2 },
-              { name : "Buntzen", id : "2b", neighborhood : "west", vidyo : false, size : 1 },
-              { name : "Deep Cove", id : "2c", neighborhood : "west", vidyo : true, size : 2 },
-              { name : "Crazy Raven", id : "2e", neighborhood : "west", vidyo : true, size : 2 },
-              { name : "Lighthouse", id : "2d", neighborhood : "east", vidyo : false, size : 1 },
-              { name : "Wreck", id : "2f", neighborhood : "east", vidyo : false, size : 1 },
-              { name : "Dinky Peak", id : "2g", neighborhood : "east", vidyo : false, size : 1 },
-              { name : "Adanac", id : "2h", neighborhood : "east", vidyo : false, size : 1 },
-              // not sure I should be including this one
-              { name : "Whytecliff", id : "commons", neighborhood : "central", vidyo : true, size : 3 }
-            ].map(function(i) { i.freebusy = []; return i;});
+var ics = config.get('ics.url');
 
-// util function to convert a Mozilla room id into a YVR
-// @mozilla email address.  Means less repeated info and perhaps less spam
-function atMozYVR(id) {
-  return "yvr-" + id + "@mozilla.com";
+var rooms = config.get('ics.rooms').map(
+  function transform(i) {
+    i.freebusy = [];
+    i.email = "yvr-" + i.id + "@mozilla.com";
+    return i;
+  }
+);
+
+function todayFilter(m, fb) {
+  // we only need the items that are within today's free/busy timeframe
+  return m.isSame(fb.start, 'day') || m.isSame(fb.end, 'day') ||
+         m.isAfter(fb.start) && m.isBefore(fb.end);
 }
 
 function getFreeBusy() {
@@ -68,21 +46,16 @@ function getFreeBusy() {
   console.log("getFreeBusy", now.format('h:mma'));
 
   rooms.forEach(function (room) {
-
-    var url = format(ics, atMozYVR(room.id), now.format("YYYYMMDD"));
+    // ICS calendar URL format: 
+    //  first %s requires email, 
+    //  second %s requires date in YYYMMMDDD (20140516) format
+    var url = format(ics, room.email, now.format("YYYYMMDD"));
 
     ical.fromURL(url, {},
       function(err, data) {
-        if (err) {
-          console.error(err);
-          return;
-        }
+        if (err) { throw err; }
 
-        var today = function (fb) {
-          // we only need the items that are within today's free/busy timeframe
-          return now.isSame(fb.start, 'day') || now.isSame(fb.end, 'day') ||
-                 now.isAfter(fb.start) && now.isBefore(fb.end);
-        };
+        var today = todayFilter.bind(undefined, now);
 
         for (var k in data){
           if (data.hasOwnProperty(k)){
@@ -161,7 +134,7 @@ app.set('view engine', 'html');
 
 app.get('/', function(req, res){
   res.render('index', {
-    title: "YVR Conference Rooms"
+    title: config.get('ics.title')
   });
 });
 

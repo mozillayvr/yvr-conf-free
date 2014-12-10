@@ -1,0 +1,47 @@
+{
+	"ics" : {
+		"title" : "YVR Conference Rooms",
+		"url" : "https://mail.mozilla.com/home/%s/Calendar?fmt=ifb&date=%s",
+    "busy-fuzz" : 15,
+    "calender-interval" : 5,
+		"rooms" : [
+			{ "name" : "Siwash", "id" : "2a",
+				"neighborhood" : "west", "vidyo" : true, "size" : 2 },
+      { "name" : "Buntzen", "id" : "2b",
+      	"neighborhood" : "west", "vidyo" : false, "size" : 1 },
+      { "name" : "Deep Cove", "id" : "2c",
+      	"neighborhood" : "west", "vidyo" : true, "size" : 2 },
+      { "name" : "Crazy Raven", "id" : "2e",
+      	"neighborhood" : "west", "vidyo" : true, "size" : 2 },
+      { "name" : "Lighthouse", "id" : "2d",
+      	"neighborhood" : "east", "vidyo" : false, "size" : 1 },
+      { "name" : "Wreck", "id" : "2f",
+      	"neighborhood" : "east", "vidyo" : false, "size" : 1 },
+      { "name" : "Dinky Peak", "id" : "2g",
+      	"neighborhood" : "east", "vidyo" : false, "size" : 1 },
+      { "name" : "Adanac", "id" : "2h",
+      	"neighborhood" : "east", "vidyo" : false, "size" : 1 },
+      { "name" : "Whytecliff", "id" : "commons",
+      	"neighborhood" : "central", "vidyo" : true, "size" : 3 }
+		]
+	},
+	"moment" : {
+		"en" : {
+	    "relativeTime" : {
+        "future": "in %s",
+        "past":   "%s ago",
+        "s":  "a jiff",
+        "m":  "%dm",
+        "mm": "%dm",
+        "h":  "%dh",
+        "hh": "%dh",
+        "d":  "a day",
+        "dd": "%d days",
+        "M":  "a month",
+        "MM": "%d months",
+        "y":  "a year",
+        "yy": "%d years"
+    	}
+		}
+	}
+}

@@ -5,7 +5,7 @@
   "description": "A Node server that gathers the free/busy calendar information for conference rooms in Mozilla YVR",
   "scripts": {
     "start": "node server.js",
-    "push": "stackato push yvr-conf"
+    "push": "stackato push -n"
   },
   "repository": {
     "type": "git",

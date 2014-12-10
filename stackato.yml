@@ -1,8 +1,17 @@
 name: yvr-conf
 
+url:
+  - yvr-conf.paas.allizom.org
+
 framework:
   type: node
 
 mem: 64M
 
 ignores: ["node_modules"]
+
+env:
+  NODE_ENV:
+    default: production
+    required: y
+    inherit: y

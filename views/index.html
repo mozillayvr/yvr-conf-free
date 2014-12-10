@@ -107,7 +107,6 @@
           'room-busy-soon' : (!isBusy && withInFuzzOfStart),
           'room-busy-later' : (!isBusy && willBeBusy)
         };
-        cxs['room-neighborhood-' + this.props.room.neighborhood] = true;
         cxs['room-size-' + this.props.room.size] = true;
         return { classes : React.addons.classSet(cxs), text : text, when : when };
       },

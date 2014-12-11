@@ -18,6 +18,18 @@ var moment = require('moment');
 
 var _ = require('underscore');
 
+_.mixin({
+  fuzz : function fuzz (time) {
+    return moment(time).subtract('minutes', BUSY_FUZZ);
+  },
+  isFree : function isFree (ev) {
+    return (ev.type === "FREE");
+  },
+  isBusy : function isBusy (ev) {
+    return (ev.type === "BUSY");
+  }
+});
+
 var config = require('config');
 
 var CALENDAR_INTERVAL = config.get('ics.calender-interval');; // in minutes
@@ -79,9 +91,8 @@ function busy(rs) {
   var now = moment();
   return _.filter(rs, function (room) {
     return _.some(room.freebusy, function (fb) {
-      var fuzzStart = moment(fb.start).subtract('minutes', BUSY_FUZZ);
       // console.log(room.name, "busy", fuzzStart.fromNow(), "and free again", moment(fb.end).fromNow());
-      return _.isBusy(fb) && now.isAfter(fuzzStart) && now.isBefore(fb.end);
+      return _.isBusy(fb) && now.isAfter(_.fuzz(fb.start)) && now.isBefore(fb.end);
     });
   });
 }
@@ -90,8 +101,7 @@ function free(rs) {
   var now = moment();
   return _.filter(rs, function (room) {
     return _.some(room.freebusy, function (fb) {
-      var fuzzStart = moment(fb.start).subtract('minutes', BUSY_FUZZ);
-      var isFree = (_.isFree(fb) && now.isAfter(fuzzStart) && now.isBefore(fb.end));
+      var isFree = (_.isFree(fb) && now.isAfter(_.fuzz(fb.start)) && now.isBefore(fb.end));
       var isNotNow = !(now.isAfter(fb.start) && now.isBefore(fb.end));
       return (isFree || isNotNow);
     });

@@ -1,30 +1,38 @@
 {
-	"ics" : {
-		"title" : "YVR Conference Rooms",
-		"url" : "https://mail.mozilla.com/home/%s/Calendar?fmt=ifb&date=%s",
-    "busy-fuzz" : 15,
+  "ics" : {
+    "title" : "YVR Conference Rooms",
+    "url" : "https://www.google.com/calendar/ical/%s/public/basic.ics?fmt=ifb&date=%s",
     "calender-interval" : 5,
-		"rooms" : [
-			{ "name" : "Siwash", "id" : "2a",
-				"vidyo" : true, "size" : 2 },
+    "rooms" : [
+      { "name" : "Siwash", "id" : "2a",
+        "email" : "mozilla.com_797672323139@resource.calendar.google.com",
+        "vidyo" : true, "size" : 2 },
       { "name" : "Buntzen", "id" : "2b",
-      	"vidyo" : true, "size" : 1 },
+        "email" : "mozilla.com_797672323136@resource.calendar.google.com",
+        "vidyo" : true, "size" : 1 },
       { "name" : "Deep Cove", "id" : "2c",
-      	"vidyo" : true, "size" : 2 },
+        "email" : "mozilla.com_797672323134@resource.calendar.google.com",
+        "vidyo" : true, "size" : 2 },
       { "name" : "Crazy Raven", "id" : "2e",
-      	"vidyo" : true, "size" : 2 },
-      { "name" : "Lighthouse", "id" : "2d",
-      	"vidyo" : false, "size" : 1 },
+        "email" : "mozilla.com_797672323131@resource.calendar.google.com",
+        "vidyo" : true, "size" : 2 },
+      { "name" : "Test Room", "id" : "2d",
+        "email" : "mozilla.com_2d3337333139353538393131@resource.calendar.google.com",
+        "vidyo" : false, "size" : 1 },
       { "name" : "Wreck", "id" : "2f",
-      	"vidyo" : true, "size" : 1 },
+        "email" : "mozilla.com_797672323337@resource.calendar.google.com",
+        "vidyo" : true, "size" : 1 },
       { "name" : "Dinky Peak", "id" : "2g",
-      	"vidyo" : false, "size" : 1 },
+        "email" : "mozilla.com_797672323338@resource.calendar.google.com",
+        "vidyo" : false, "size" : 1 },
       { "name" : "Adanac", "id" : "2h",
-      	"vidyo" : false, "size" : 1 },
+        "email" : "mozilla.com_797672323339@resource.calendar.google.com",
+        "vidyo" : false, "size" : 1 },
       { "name" : "Whytecliff", "id" : "commons",
-      	"vidyo" : true, "size" : 3 }
-		]
-	},
+        "email" : "mozilla.com_797672323331@resource.calendar.google.com",
+        "vidyo" : true, "size" : 3 }
+    ]
+  },
 	"moment" : {
 		"en" : {
 	    "relativeTime" : {

@@ -4,7 +4,7 @@ url:
   - yvr-conf.paas.allizom.org
 
 framework:
-  runtime: node
+  runtime: node010
   type: node
 
 disk: 2048

@@ -1,6 +1,6 @@
 {
   "ics" : {
-    "title" : "YVR Conference Rooms",
+    "port": 5000,
     "url" : "https://www.google.com/calendar/ical/%s/public/basic.ics?fmt=ifb&date=%s",
     "calender-interval" : 5,
     "rooms" : [

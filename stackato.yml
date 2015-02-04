@@ -4,11 +4,13 @@ url:
   - yvr-conf.paas.allizom.org
 
 framework:
+  runtime: node
   type: node
 
-mem: 64M
+disk: 2048
+mem: 64
 
-ignores: ["node_modules"]
+ignores: ["node_modules", "bower_components", "styles", "app"]
 
 env:
   NODE_ENV:

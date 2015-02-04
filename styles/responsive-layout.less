@@ -1,0 +1,26 @@
+/*! This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*/
+
+/* for small screens drop the sizes and margins */
+@media (max-width: 768px) {
+  h2 {
+    font-size: @font-size-small;
+  }
+}
+
+/* for large screens increase padding and font sizes */
+@media (min-width: 992px) {
+  body {
+    font-size: @font-size-large;
+  }
+}
+
+@media (min-width: 1800px) {
+  .room {
+    font-weight: bold;
+    font-size: ceil((@font-size-large * 1.25));
+  }
+}
+

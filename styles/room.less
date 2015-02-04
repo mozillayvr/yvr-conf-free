@@ -1,0 +1,69 @@
+/*! This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*/
+
+.room {
+  position: relative;
+  // margin-bottom: 20px;
+  // padding: 10px;
+  transition: background-color 0.5s ease;
+  .text-center;
+}
+
+.room .attrs {
+  // font-size: smaller;
+  // padding: 0 10px;
+}
+
+.room .name,
+.room .glyphicon-ok {
+  position: relative;
+  display: block;
+  top: 25%;
+}
+
+.room .glyphicon-ok {
+  font-size: @font-size-icon-large;
+}
+
+.room.room-busy .glyphicon-ok,
+.room.room-busy-soon .glyphicon-ok,
+.room.room-busy-later .glyphicon-ok {
+  display: none;
+}
+
+.room-busy {
+  background-color: #323232;
+}
+.room-free-soon {
+  background-color: #94A1A0 !important;
+}
+.room-busy-soon {
+  background-color: #EBC300 !important;
+}
+.room-busy-soon .name {
+  color: #333 !important;
+}
+.room-free {
+  background-color: #27B648;
+}
+
+.room .fb {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding-top: 10px;
+  font-size: 80%;
+  background-color: rgba(0,0,0,0.2);
+}
+
+.room .fb > div {
+  transition: height 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  height: 1.5em;
+}
+
+.room .fb > div:empty {
+  height: 0.5em;
+}

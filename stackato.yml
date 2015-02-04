@@ -3,17 +3,32 @@ name: yvr-conf
 url:
   - yvr-conf.paas.allizom.org
 
+instances: 1
+
 framework:
   runtime: node010
   type: node
 
-disk: 2048
-mem: 64
+mem: 64M
 
-ignores: ["node_modules", "bower_components", "styles", "app"]
+ignores:
+  - .git
+  - .gitignore
+  - .npmignore
+  - node_modules
+  - bower_components
+  - styles
+  - app
 
 env:
   NODE_ENV:
     default: production
     required: y
     inherit: y
+
+hooks:
+  pre-staging:
+    - npm cache clean
+
+processes:
+  web: npm start

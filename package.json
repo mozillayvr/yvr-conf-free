@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "author": "Bryan Clark <clarkbw@gmail.com>",
   "description": "A Node server that gathers the free/busy calendar information for conference rooms in Mozilla YVR",
+  "private": true,
   "scripts": {
     "start": "node server.js",
     "dev": "supervisor server.js",
@@ -18,13 +19,13 @@
     "room"
   ],
   "dependencies": {
-    "config": "1.9.0",
+    "config": "~1.10.0",
     "ejs": "~1.0.0",
     "express": "~4.8.0",
     "gcal-conf-free-api": "~0.2.0",
-    "lodash": "^2.4.1",
-    "moment": "2.9.0",
-    "react": "^0.12.2"
+    "lodash": "~3.1.0",
+    "moment": "~2.9.0",
+    "react": "~0.12.2"
   },
   "license": "MPL",
   "engines": {

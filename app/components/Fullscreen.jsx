@@ -38,7 +38,7 @@ var Fullscreen = React.createClass({
   handleMouseMove : function (e) {
     clearTimeout(this.timeout);
     if (!this.state.isMouseMoving) {
-      this.setState({ isMouseMoving : true });      
+      this.setState({ isMouseMoving : true });
     }
     this.timeout = setTimeout(function () {
       this.setState({ isMouseMoving : false });
@@ -86,12 +86,12 @@ var Fullscreen = React.createClass({
     var buttonText = this.state.isFullScreen ? 'Leave Fullscreen (f)' : 'Fullscreen (f)';
     var show = this.state.isMouseMoving ? 'show-overlay' : '';
     return (
-    <div id="overlay" className={show}>
-      <button onClick={this.handleClick} id="fullscreen">{buttonText}</button>
-    </div>
+      <div id="overlay" className={show}>
+        <button onClick={this.handleClick} id="fullscreen">{buttonText}</button>
+      </div>
     );
   }
-  
+
 });
-  
+
 module.exports = Fullscreen;

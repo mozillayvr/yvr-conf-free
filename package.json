@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "supervisor server.js",
-    "push": "stackato push -n"
+    "push": "git push heroku master"
   },
   "repository": {
     "type": "git",

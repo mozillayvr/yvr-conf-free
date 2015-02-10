@@ -111,7 +111,7 @@ var Fullscreen = React.createClass({displayName: "Fullscreen",
   handleMouseMove : function (e) {
     clearTimeout(this.timeout);
     if (!this.state.isMouseMoving) {
-      this.setState({ isMouseMoving : true });      
+      this.setState({ isMouseMoving : true });
     }
     this.timeout = setTimeout(function () {
       this.setState({ isMouseMoving : false });
@@ -159,14 +159,14 @@ var Fullscreen = React.createClass({displayName: "Fullscreen",
     var buttonText = this.state.isFullScreen ? 'Leave Fullscreen (f)' : 'Fullscreen (f)';
     var show = this.state.isMouseMoving ? 'show-overlay' : '';
     return (
-    React.createElement("div", {id: "overlay", className: show}, 
-      React.createElement("button", {onClick: this.handleClick, id: "fullscreen"}, buttonText)
-    )
+      React.createElement("div", {id: "overlay", className: show}, 
+        React.createElement("button", {onClick: this.handleClick, id: "fullscreen"}, buttonText)
+      )
     );
   }
-  
+
 });
-  
+
 module.exports = Fullscreen;
 
 
@@ -220,39 +220,37 @@ moment.lang('en', {
 });
 
 var Peeps = require('./Peeps.jsx');
-var BUSY_FUZZ = 5;
+var BUSY_FUZZ = 10;
 
 var Room = React.createClass({displayName: "Room",
   getInitialState: function() {
-    return { time : moment(), busy : false, soon : false, later : false, next : false };
+    return { time : moment(),
+             busy : null, // free / busy object == props.room.current
+             next : null, // free / busy object == props.room.next
+             soon : false // is either free or busy soon
+            };
   },
   tick: function() {
     var state = { time : moment() };
+    var start,
+        end,
+        now = moment(),
+        fuzzFromNow = now.clone().add(BUSY_FUZZ, 'minutes');
 
-    if (this.props.room) {
-      if (this.state.busy) {
-        var end = moment(this.props.room.current.end);
-        state.soon = moment(end).isBetween(moment(), moment().add(5, 'min'));
-      } else if (this.state.next) { // if free and upcoming event
-        var start = moment(this.props.room.next.start);
-        state.soon = moment(start).isBetween(moment(), moment().add(5, 'min'));
-      } else {
-        state.soon = false;
-      }
-
-      if (this.state.next) {
-        var start = moment(this.props.room.next.start);
-        state.later = start.isBetween(moment(), moment().add(1, 'hour'));
-      } else {
-        state.later = false;
-      }
+    state.soon = false;
+    if (this.state.busy) {
+      end = moment(this.state.busy.end);
+      state.soon = end.isBetween(now, fuzzFromNow);
+    } else if (this.state.next) { // if free and upcoming event
+      start = moment(this.state.next.start);
+      state.soon = start.isBetween(now, fuzzFromNow);
     }
 
     this.setState(state);
   },
   componentWillReceiveProps: function(nextProps) {
-    var state = { busy : nextProps.room.current !== null,
-                  next : nextProps.room.next !== null };
+    var state = { busy : nextProps.room.current,
+                  next : nextProps.room.next };
     this.setState(state);
   },
   componentWillMount: function() {
@@ -272,28 +270,25 @@ var Room = React.createClass({displayName: "Room",
       return React.createElement("div", null);
     }
 
-    console.log(room, this.state);
+    console.log(room.name, this.state);
     var text = "", when = "";
     if (this.state.busy) {
       text = "free";
       text += (this.state.soon) ? " in " : " at ";
-      when = (this.state.soon) ? moment(room.current.end).fromNow() : moment(room.current.end).format('h:mma');
-    } else {
-      if (this.state.next && this.state.later) {
-        text = "booked";
-        text += (this.state.soon) ? " in " : " at ";
-        when = (this.state.soon) ? moment(room.next.end).fromNow() : moment(room.next.end).format('h:mma');
-      }
+      when = (this.state.soon) ? moment(this.state.busy.end).fromNow() : moment(this.state.busy.end).format('h:mma');
+    } else if (this.state.next) {
+      text = "booked";
+      text += (this.state.soon) ? " in " : " at ";
+      when = (this.state.soon) ? moment(this.state.next.end).fromNow() : moment(this.state.next.end).format('h:mma');
     }
 
     var cxs = {
       'room' : true,
       'room-vidyo' : room.vidyo,
-      'room-free' : (!this.state.busy),
-      'room-busy' : this.state.busy,
-      'room-free-soon' : (!this.state.busy && this.state.soon),
-      'room-busy-soon' : (this.state.busy && this.state.soon),
-      'room-busy-later' : (this.state.busy && this.state.later)
+      'room-free' : (this.state.busy === null),
+      'room-busy' : (this.state.busy !== null),
+      'room-free-soon' : (this.state.next === null && this.state.soon),
+      'room-busy-soon' : (this.state.next !== null && this.state.soon)
     };
     cxs['room-size-' + room.size] = true;
 

@@ -22,7 +22,7 @@
     "config": "~1.10.0",
     "ejs": "~1.0.0",
     "express": "~4.8.0",
-    "gcal-conf-free-api": "~0.2.1",
+    "gcal-conf-free-api": "~0.3.0",
     "lodash": "~3.1.0",
     "moment": "~2.9.0",
     "react": "~0.12.2"

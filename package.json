@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "supervisor server.js",
-    "push": "git push heroku master"
+    "push": "git push heroku master",
+    "outdated": "npm outdated --depth=0"
   },
   "repository": {
     "type": "git",
@@ -19,38 +20,38 @@
     "room"
   ],
   "dependencies": {
-    "config": "~1.10.0",
-    "ejs": "~1.0.0",
-    "express": "~4.8.0",
-    "gcal-conf-free-api": "~0.3.0",
-    "lodash": "~3.1.0",
-    "moment": "~2.9.0",
-    "react": "~0.12.2"
+    "config": "~1.12.0",
+    "ejs": "~2.3.1",
+    "express": "~4.12.0",
+    "gcal-conf-free-api": "~1.0.x",
+    "lodash": "~3.6.0",
+    "moment": "~2.10.0",
+    "react": "~0.13.0"
   },
   "license": "MPL",
   "engines": {
     "node": "0.10.x"
   },
   "devDependencies": {
-    "browserify": "~8.1.1",
+    "browserify": "latest",
     "del": "~1.1.1",
-    "gulp": "~3.8.10",
-    "gulp-autoprefixer": "~2.1.0",
-    "gulp-concat": "~2.2.0",
-    "gulp-jshint": "~1.9.0",
-    "gulp-less": "~2.0.1",
-    "gulp-license": "~1.0.0",
-    "gulp-livereload": "~3.4.0",
-    "gulp-load-plugins": "~0.8.0",
-    "gulp-notify": "~2.1.0",
-    "gulp-react": "~2.0.0",
-    "gulp-size": "~1.2.0",
-    "gulp-util": "~3.0.2",
-    "literalify": "~0.3.0",
-    "node-static": "~0.7.6",
-    "reactify": "~1.0.0",
-    "vinyl-source-stream": "~1.0.0",
-    "watchify": "~2.2.1"
+    "gulp": "latest",
+    "gulp-autoprefixer": "latest",
+    "gulp-concat": "latest",
+    "gulp-jshint": "latest",
+    "gulp-less": "latest",
+    "gulp-license": "latest",
+    "gulp-livereload": "latest",
+    "gulp-load-plugins": "latest",
+    "gulp-notify": "latest",
+    "gulp-react": "latest",
+    "gulp-size": "latest",
+    "gulp-util": "latest",
+    "literalify": "latest",
+    "node-static": "latest",
+    "reactify": "latest",
+    "vinyl-source-stream": "latest",
+    "watchify": "latest"
   },
   "paths": {
     "less": "./styles/main.less",

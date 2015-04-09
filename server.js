@@ -5,12 +5,12 @@
 
 /* jshint strict: true, node: true */
 
-"use strict";
+'use strict';
 
 var config = require('config');
 var path = require('path');
 
-var app = require('gcal-conf-free-api');
+var app = require('gcal-conf-free-api').app;
 
 app.use('/', require('express').static(path.join(__dirname, 'public')));
 

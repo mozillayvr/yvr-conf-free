@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var React = require('react');
 var ReactAddons = require('react/addons').addons;
 var _ = require('lodash');

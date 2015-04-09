@@ -1,0 +1,5 @@
+{
+  "heroku" : {
+    "host" : "yvr-conf.herokuapp.com"
+  }
+}

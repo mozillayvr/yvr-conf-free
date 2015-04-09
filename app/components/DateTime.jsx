@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var React = require('react');
 var moment = require('moment');
 
@@ -27,7 +26,7 @@ var DateTime = React.createClass({
       </div>
     );
   }
-  
+
 });
-  
+
 module.exports = DateTime;

@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var React = require('react');
 
 var Rooms = require('./Rooms.jsx'),
@@ -8,14 +7,14 @@ var Rooms = require('./Rooms.jsx'),
 var App = React.createClass({
   render: function() {
     return (
-      <div id="app" className="container-fluid">
+      <div className='container-fluid'>
         <DateTime/>
         <Rooms/>
         <Fullscreen/>
       </div>
     );
   }
-  
+
 });
-  
+
 module.exports = App;

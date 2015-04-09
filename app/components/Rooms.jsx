@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var React = require('react');
 var _ = require('lodash');
 
@@ -53,7 +52,7 @@ var Rooms = React.createClass({
         </div>
       </div>
     );
-  }  
+  }
 });
-  
+
 module.exports = Rooms;

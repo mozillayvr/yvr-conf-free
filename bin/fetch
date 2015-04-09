@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+
+var fb = require('gcal-conf-free-api').fb;
+fb.getAll();
+
+process.exit(1);
